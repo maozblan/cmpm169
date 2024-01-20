@@ -2,8 +2,6 @@
 // Author: Your Name
 // Date:
 
-let counter = 0;
-
 let starX = [];
 let starY = [];
 let stars = [];
@@ -22,23 +20,22 @@ function setup() {
 
     initStars();
 
-    forestSize = random(20, 30);
+    forestSize = int(width / 100);
     //create tree and leaves array letiables 
     for (let i = 0; i < forestSize; i++) {
         this['tree' + i] = [];
+        this['tree' + (forestSize+i)] = [];
         this['leaves' + i] = [];
+        this['leaves' + (forestSize+i)] = [];
     }
 
+    // create the list of trees to be drawn
     for (let i = 0; i < forestSize; i++) {
-        createTree(i);
+        // layer 1
+        createTree(i, height * 0.07, height * 0.25);
+        // layer 2
+        createTree(forestSize+i, height * 0.23, height * 0.4);
     }
-    
-    /*
-    resetButton = createImg('assets/restartIcon.png');
-    resetButton.size(20, 20);
-    resetButton.position(530, 252);
-    resetButton.mousePressed(resetSketch);
-    */
 }
 
 function resetSketch() {
@@ -51,30 +48,28 @@ function initStars() {
     for (let i = 0; i < 50; i++) {
         stars[i] = new Star();
     }
-
 }
 
-
-function createTree(num) {
-
-    widthVal = random(1, width)
-
+// make a list of tree branchs and leaves
+function createTree(num, minHeight, maxHeight) {
+    // random x location for root of tree and ending position of tree
+    widthVal = random(1, width);
     if (widthVal > width / 2) {
         endRootVal = widthVal - (widthVal / random(1, 500));
-    }
-    else {
+    } else {
         endRootVal = widthVal + (widthVal / random(1, 500));
     }
 
     let a = createVector(widthVal, height);
-    let b = createVector(endRootVal, height - random(40, 180));
+    let b = createVector(endRootVal, height - random(minHeight, maxHeight));
     let root = new Branch(a, b);
 
     this['tree' + num][0] = root;
 
-    let branchEnd = 6;
+    let branchEnd = 3;
+    let counter = 0;
     for (let i = 0; i < branchEnd; i++) {
-
+        // mock recursive fractal calls
         for (let i = this['tree' + num].length - 1; i >= 0; i--) {
             if (!this['tree' + num][i].finished) {
                 this['tree' + num].push(this['tree' + num][i].branchLeft());
@@ -82,10 +77,8 @@ function createTree(num) {
             }
             this['tree' + num][i].finished = true;
         }
-
         counter++;
-        leafSpawnChance = random(0, 1);
-        if (counter == branchEnd && leafSpawnChance > 0.2) {
+        if (counter == branchEnd) {
             for (let i = 0; i < this['tree' + num].length; i++) {
                 if (!this['tree' + num][i].finished) {
                     let leaf = this['tree' + num][i].end.copy();
@@ -95,8 +88,6 @@ function createTree(num) {
 
         }
     }
-
-    counter = 0;
 }
 
 
@@ -108,6 +99,14 @@ function draw() {
     drawStars();  // stars has it's own draw function
 
 
+    // back tree layer
+    for (let i = 0; i < forestSize; i++) {
+        drawTree(forestSize+i);
+    }
+
+    // mist
+
+    // front tree layer
     for (let i = 0; i < forestSize; i++) {
         drawTree(i);
     }
@@ -121,21 +120,20 @@ function draw() {
     noStroke();
     textSize(15);
     //text('~ V i v e k   S i n g h   N e g i', 130, 310);
-
 }
 
+// from the list of trees made in createTree
 function drawTree(num) {
-
-    //Show Tree
+    // Show Tree
     for (let i = 0; i < this['tree' + num].length; i++) {
         this['tree' + num][i].show();
     }
-
-    //Show Leaves
+    // Show Leaves
     for (let i = 0; i < this['leaves' + num].length; i++) {
-        fill(7, 11, 52);
+        fill(0);
         noStroke();
-        ellipse(this['leaves' + num][i].x, this['leaves' + num][i].y, 25, 25);
+        let leafSize = 100;
+        ellipse(this['leaves' + num][i].x, this['leaves' + num][i].y, leafSize, leafSize);
     }
 }
 
@@ -172,12 +170,12 @@ class Star {
         this.t = random(TAU);
     }
 
+    // has it's own draw function so make the "sparkle"
     draw() {
         this.t += 0.1;
         let scale = this.size + sin(this.t) * 2;
         noStroke();
         fill(255, 255, 255);
-
         ellipse(this.x, this.y, scale, scale);
     }
 }
