@@ -1,9 +1,8 @@
-function Branch(begin, end, color) {
+function Branch(begin, end) {
 
     this.begin = begin;
     this.end = end;
     this.finished = false;
-    this.color = color;
 
     this.show = function () {
         stroke(0);

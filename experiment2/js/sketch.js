@@ -2,12 +2,15 @@
 // Author: Your Name
 // Date:
 
+
+// Globals
+//stars
 let starX = [];
 let starY = [];
 let stars = [];
-
+// trees
 let forestSize;
-let resetButton
+// mist
 
 function preload() {
     
@@ -16,11 +19,18 @@ function preload() {
 function setup() {
 
     createCanvas(windowWidth, windowHeight);
-    //textFont(myFont);
+    canvasContainer = $("#canvas-container");
+    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
+    canvas.parent("canvas-container");
+    // resize canvas is the page is resized
+    $(window).resize(function() {
+        console.log("Resizing...");
+        resizeCanvas(canvasContainer.width(), canvasContainer.height());
+    });
 
     initStars();
 
-    forestSize = int(width / 100);
+    forestSize = int(width / 150);
     //create tree and leaves array letiables 
     for (let i = 0; i < forestSize; i++) {
         this['tree' + i] = [];
@@ -36,12 +46,9 @@ function setup() {
         // layer 2
         createTree(forestSize+i, height * 0.23, height * 0.4);
     }
-}
 
-function resetSketch() {
-    clear();
-    //resetButton.remove();
-    setup();
+    // set up the mist
+    field = new Field();
 }
 
 function initStars() {
@@ -105,21 +112,12 @@ function draw() {
     }
 
     // mist
+    field.draw();
 
     // front tree layer
     for (let i = 0; i < forestSize; i++) {
-        drawTree(i);
+        // drawTree(i);
     }
-
-    //text
-    noStroke();
-    textSize(25);
-    fill(255)
-    //text('F r a c t a l    F o r e s t', 130, 270);
-
-    noStroke();
-    textSize(15);
-    //text('~ V i v e k   S i n g h   N e g i', 130, 310);
 }
 
 // from the list of trees made in createTree
@@ -175,7 +173,7 @@ class Star {
         this.t += 0.1;
         let scale = this.size + sin(this.t) * 2;
         noStroke();
-        fill(255, 255, 255);
+        fill(255);
         ellipse(this.x, this.y, scale, scale);
     }
 }
