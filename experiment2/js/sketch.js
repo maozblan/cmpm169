@@ -2,66 +2,182 @@
 // Author: Your Name
 // Date:
 
-// Here is how you might set up an OOP p5.js project
-// Note that p5.js looks for a file called sketch.js
+let counter = 0;
 
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+let starX = [];
+let starY = [];
+let stars = [];
 
-// Globals
-let myInstance;
-let canvasContainer;
+let forestSize;
+let resetButton
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
-
-    myMethod() {
-        // code to run when method is called
-    }
+function preload() {
+    
 }
 
-// setup() function is called once when the program starts
 function setup() {
-    // place our canvas, making it fit our container
-    canvasContainer = $("#canvas-container");
-    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
-    canvas.parent("canvas-container");
-    // resize canvas is the page is resized
-    $(window).resize(function() {
-        console.log("Resizing...");
-        resizeCanvas(canvasContainer.width(), canvasContainer.height());
-    });
-    // create an instance of the class
-    myInstance = new MyClass(VALUE1, VALUE2);
 
-    var centerHorz = windowWidth / 2;
-    var centerVert = windowHeight / 2;
+    createCanvas(windowWidth, windowHeight);
+    //textFont(myFont);
+
+    initStars();
+
+    forestSize = random(20, 30);
+    //create tree and leaves array letiables 
+    for (let i = 0; i < forestSize; i++) {
+        this['tree' + i] = [];
+        this['leaves' + i] = [];
+    }
+
+    for (let i = 0; i < forestSize; i++) {
+        createTree(i);
+    }
+    
+    /*
+    resetButton = createImg('assets/restartIcon.png');
+    resetButton.size(20, 20);
+    resetButton.position(530, 252);
+    resetButton.mousePressed(resetSketch);
+    */
 }
 
-// draw() function is called repeatedly, it's the main animation loop
+function resetSketch() {
+    clear();
+    //resetButton.remove();
+    setup();
+}
+
+function initStars() {
+    for (let i = 0; i < 50; i++) {
+        stars[i] = new Star();
+    }
+
+}
+
+
+function createTree(num) {
+
+    widthVal = random(1, width)
+
+    if (widthVal > width / 2) {
+        endRootVal = widthVal - (widthVal / random(1, 500));
+    }
+    else {
+        endRootVal = widthVal + (widthVal / random(1, 500));
+    }
+
+    let a = createVector(widthVal, height);
+    let b = createVector(endRootVal, height - random(40, 180));
+    let root = new Branch(a, b);
+
+    this['tree' + num][0] = root;
+
+    let branchEnd = 6;
+    for (let i = 0; i < branchEnd; i++) {
+
+        for (let i = this['tree' + num].length - 1; i >= 0; i--) {
+            if (!this['tree' + num][i].finished) {
+                this['tree' + num].push(this['tree' + num][i].branchLeft());
+                this['tree' + num].push(this['tree' + num][i].branchRight());
+            }
+            this['tree' + num][i].finished = true;
+        }
+
+        counter++;
+        leafSpawnChance = random(0, 1);
+        if (counter == branchEnd && leafSpawnChance > 0.2) {
+            for (let i = 0; i < this['tree' + num].length; i++) {
+                if (!this['tree' + num][i].finished) {
+                    let leaf = this['tree' + num][i].end.copy();
+                    this['leaves' + num].push(leaf);
+                }
+            }
+
+        }
+    }
+
+    counter = 0;
+}
+
+
+// main loop! 
 function draw() {
-    background(220);    
-    // call a method on the instance
-    myInstance.myMethod();
 
-    // Put drawings here
-    var centerHorz = canvasContainer.width() / 2 - 125;
-    var centerVert = canvasContainer.height() / 2 - 125;
-    fill(234, 31, 81);
+    // background
+    drawGradient();
+    drawStars();  // stars has it's own draw function
+
+
+    for (let i = 0; i < forestSize; i++) {
+        drawTree(i);
+    }
+
+    //text
     noStroke();
-    rect(centerHorz, centerVert, 250, 250);
-    fill(255);
-    textStyle(BOLD);
-    textSize(140);
-    text("p5*", centerHorz + 10, centerVert + 200);
+    textSize(25);
+    fill(255)
+    //text('F r a c t a l    F o r e s t', 130, 270);
+
+    noStroke();
+    textSize(15);
+    //text('~ V i v e k   S i n g h   N e g i', 130, 310);
+
 }
 
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
+function drawTree(num) {
+
+    //Show Tree
+    for (let i = 0; i < this['tree' + num].length; i++) {
+        this['tree' + num][i].show();
+    }
+
+    //Show Leaves
+    for (let i = 0; i < this['leaves' + num].length; i++) {
+        fill(7, 11, 52);
+        noStroke();
+        ellipse(this['leaves' + num][i].x, this['leaves' + num][i].y, 25, 25);
+    }
+}
+
+
+function drawStars() {
+    for (let i = 0; i < stars.length; i++) {
+        stars[i].draw();
+    }
+}
+
+function drawGradient() {
+    let color1 = color(50);  //top
+    let color2 = color(150); //bottom
+    setGradient(0, 0, windowWidth, windowHeight, color1, color2, "Y");
+}
+
+function setGradient(x, y, w, h, c1, c2, axis) {
+    noFill();
+    if (axis == "Y") {  // Top to bottom gradient
+        for (let i = y; i <= y + h; i++) {
+            let inter = map(i, y, y + (h * 1.3), 0, 1);
+            let c = lerpColor(c1, c2, inter);
+            stroke(c);
+            line(x, i, x + w, i);
+        }
+    }
+}
+
+class Star {
+    constructor() {
+        this.x = random(windowWidth);
+        this.y = random(windowHeight);
+        this.size = random(0.25, 4);
+        this.t = random(TAU);
+    }
+
+    draw() {
+        this.t += 0.1;
+        let scale = this.size + sin(this.t) * 2;
+        noStroke();
+        fill(255, 255, 255);
+
+        ellipse(this.x, this.y, scale, scale);
+    }
 }
