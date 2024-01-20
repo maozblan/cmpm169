@@ -4,6 +4,7 @@
 
 
 // Globals
+let canvasContainer;
 //stars
 let starX = [];
 let starY = [];
@@ -11,10 +12,7 @@ let stars = [];
 // trees
 let forestSize;
 // mist
-
-function preload() {
-    
-}
+let field;
 
 function setup() {
 
@@ -42,13 +40,13 @@ function setup() {
     // create the list of trees to be drawn
     for (let i = 0; i < forestSize; i++) {
         // layer 1
-        createTree(i, height * 0.07, height * 0.25);
+        createTree(i, height * 0.1, height * 0.3);
         // layer 2
-        createTree(forestSize+i, height * 0.23, height * 0.4);
+        createTree(forestSize+i, height * 0.2, height * 0.35);
     }
 
     // set up the mist
-    field = new Field();
+    field = new Field(-1*canvasContainer.height()/3);
 }
 
 function initStars() {
@@ -103,8 +101,6 @@ function draw() {
 
     // background
     drawGradient();
-    drawStars();  // stars has it's own draw function
-
 
     // back tree layer
     for (let i = 0; i < forestSize; i++) {
@@ -116,8 +112,12 @@ function draw() {
 
     // front tree layer
     for (let i = 0; i < forestSize; i++) {
-        // drawTree(i);
+        drawTree(i);
     }
+
+    // i just like it sparkling all over the place soo i moved it in front of the trees
+    // who doesn't like a good bling bling
+    drawStars();  // stars has it's own draw function
 }
 
 // from the list of trees made in createTree
@@ -143,9 +143,9 @@ function drawStars() {
 }
 
 function drawGradient() {
-    let color1 = color(50);  //top
-    let color2 = color(150); //bottom
-    setGradient(0, 0, windowWidth, windowHeight, color1, color2, "Y");
+    let color1 = color(255);  //top
+    let color2 = color(0); //bottom
+    setGradient(0, 0, canvasContainer.width(), canvasContainer.height(), color1, color2, "Y");
 }
 
 function setGradient(x, y, w, h, c1, c2, axis) {
@@ -162,8 +162,8 @@ function setGradient(x, y, w, h, c1, c2, axis) {
 
 class Star {
     constructor() {
-        this.x = random(windowWidth);
-        this.y = random(windowHeight);
+        this.x = random(canvasContainer.width());
+        this.y = random(canvasContainer.height());
         this.size = random(0.25, 4);
         this.t = random(TAU);
     }
