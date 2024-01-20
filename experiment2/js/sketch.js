@@ -13,6 +13,8 @@ let stars = [];
 let forestSize;
 // mist
 let field;
+// birds
+let flocks = [];
 
 function setup() {
 
@@ -118,6 +120,9 @@ function draw() {
     // i just like it sparkling all over the place soo i moved it in front of the trees
     // who doesn't like a good bling bling
     drawStars();  // stars has it's own draw function
+
+    // draw the birds
+    drawBirds();
 }
 
 // from the list of trees made in createTree
