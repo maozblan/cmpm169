@@ -1,3 +1,7 @@
+// Birds.js - handles drawing of bird flocks on mouse click
+// Author: Lyssa Li
+// Date: 2024 Jan 22
+
 class Bird {
     constructor(x, y) {
         this.x = x;

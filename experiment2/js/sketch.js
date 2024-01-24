@@ -1,6 +1,6 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
+// sketch.js - main sketch loops to draw animation, calls all other files
+// Author: Lyssa Li
+// Date: 2024 Jan 22
 
 
 // Globals

@@ -1,3 +1,8 @@
+// Mist.js - handles drawing of noise line used for mist
+// edited from https://editor.p5js.org/wmodes/sketches/SFh-TOVFs
+// Author: Lyssa Li
+// Date: 2024 Jan 22
+
 class Line {
   constructor(xNoiseFreq, yNoiseFreq, xIncrement, yOffset) {
     this.xNoiseFreq = xNoiseFreq;

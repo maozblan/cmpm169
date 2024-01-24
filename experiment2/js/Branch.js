@@ -1,3 +1,8 @@
+// Branch.js - handles branching algortihm for fractal trees
+// edited from https://github.com/negiyosai/Fractal-Forest/tree/master
+// Author: Lyssa Li
+// Date: 2024 Jan 22
+
 function Branch(begin, end) {
 
     this.begin = begin;
