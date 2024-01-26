@@ -1,5 +1,44 @@
+#header {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-.cat-photo {
-  margin: 10px;
-  max-width: 500px;
+#canvas-container {
+  position: absolute;
+  height: 20vh;
+  width: 100vw;
+  bottom: 0px;
+  z-index: 20;
+}
+
+nav {
+  padding: 20px;
+  height: fit-content;
+  min-height: 100px;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+#links {
+  z-index: 10;
+}
+
+#ocean {
+  background-color: #0088cc;
+  height: calc(100% + 150px);
+  width: calc(100% + 100px);
+  position: absolute;
+  top: -75px;
+  left: -50px;
+  filter: blur(75px);
+  z-index: 5;
 }

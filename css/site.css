@@ -1,7 +1,38 @@
+/* color */
+body.light {
+  --background: #FFFFFF;
+  --color1: #dedede;
+  --color2: #808080;
+  --text: #222222;
+  --accent: #d64332;
+}
+body.dark {
+  --background: #000000;
+  --color1: #343434;
+  --color2: #676767;
+  --text: #e4e4e4;
+  --accent: var(--accent);
+}
+
+body {
+  background-color: var(--background);
+}
+
+body, div, nav {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 0;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+}
+
 #content {
-  margin: 10px;080;
+  margin: 10px;
   padding: 10px;
-  border: solid 1px #808
+  border: solid 1px #808;
 }
 
 .minor-section {
