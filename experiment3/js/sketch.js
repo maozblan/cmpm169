@@ -4,7 +4,7 @@
 
 // L-systems base from https://editor.p5js.org/wmodes/sketches/UoSg_99pH
 
-let boop;
+let boops = [];
 
 function setup() {
     // place our canvas, making it fit our container
@@ -19,13 +19,12 @@ function setup() {
 
     background(0);
     stroke(255);
-
-    boop = new DragonCurve(5);
 }
 
 function mousePressed() {
+    boops.push(new DragonCurve(random(5,7)));
     console.log('boop');
-    boop.drawLine();
+    boops[boops.length-1].drawLine();
 }
 
 class DragonCurve {
@@ -36,7 +35,7 @@ class DragonCurve {
         }
         this.sentence = "F";
         this.len = 10;
-        this.angle = 85;
+        this.angle = 95;
         this.iterations = num;
         for (let i = 0; i < this.iterations; ++i) {
             this.generate();
@@ -44,6 +43,11 @@ class DragonCurve {
 
         // for iterating the lines
         this.index = 0;
+
+        // for the math (to avoid translations)
+        this.x = random(width/4, width/2);
+        this.y = random(height/4, height/2);
+        this.currentAngle = random(0, 360);
     }
 
     generate() {
@@ -56,17 +60,21 @@ class DragonCurve {
     }
 
     drawLine() {
-        translate(width/2, height/2);
         while (this.index < this.sentence.length) {
             let current = this.sentence.charAt(this.index++);
             if (current === "F" || current === "G") {
-                line(0, 0, -this.len, 0);
-                translate(-this.len, 0);
+                let offsetX = this.len*Math.cos(radians(this.currentAngle));
+                let offsetY = this.len*Math.sin(radians(this.currentAngle));
+                line(this.x, this.y, this.x-offsetX, this.y+offsetY);
+                // update x and y
+                this.x -= offsetX;
+                this.y += offsetY;
             } else if (current === "+") {
-                rotate(radians(this.angle));
+                this.currentAngle += 180 - this.angle;
             } else if (current === "-") {
-                rotate(radians(-this.angle));
+                this.currentAngle += 180 + this.angle;
             }
+            this.currentAngle = this.currentAngle % 360;
         }
     }
 }
