@@ -5,7 +5,11 @@
 // L-systems base from https://editor.p5js.org/wmodes/sketches/UoSg_99pH
 
 let boops = [];
-let color1 = [255];
+let color1 = [255];         // normal fireworks
+let color2 = [255, 0, 0];   // user click fireworks
+
+// pad the screen so the fireworks don't appear too close to the edges
+let padding = 10;
 
 function setup() {
     // place our canvas, making it fit our container
@@ -19,34 +23,45 @@ function setup() {
     });
 
     background(0);
-    boops = new Firework(color1);
+    // start firework show
+    boops.push(new Firework(width/2, height/2, color1));
 }
 
 function draw() {
-    background(0, 0, 0, 7);
-    boops.draw();
+    // fade out the previous drawings
+    background(0, 0, 0, 30);
+    for (let i = 0; i < boops.length; ++i) {
+        if (boops[i].draw()) {
+            boops.splice(i, 1);
+        }
+    }
+    // console.log(boops.length);
+    if (random(0, 1) > 0.97) {
+        let x = random(width/padding, width-(width/padding));
+        let y = random(height/padding, height-(height/padding));
+        boops.push(new Firework(x, y, color1));
+    }
 }
 
 function mousePressed() {
-    boops.push()
+    boops.push(new Firework(mouseX, mouseY, color2));
 }
 
 class Firework {
-    constructor(color) {
+    constructor(x, y, color) {
         // randomize the firework
         let count = Math.floor(random(15, 30));    // how many Dragon Curves are in the firework
         
-        // pad the screen so the fireworks don't appear too close to the edges
-        let padding = 10;
-        // let x = random(width/padding, width-(width/padding));
-        // let y = random(height/padding, height-(height/padding));
-        this.x = width/2;
-        this.y = height/2;
+        this.x = x;
+        this.y = y;
+
         // list of dragon curves
         this.firework = [];
+        let broken = random(0, 1) <= 0.25 ? true : false;  // add a chance element to get broken fireworks
+        console.log(broken);
         for (let i = 0; i < count; ++i) {
-            let complexity = Math.floor(random(5, 8));     // how many generations the Dragon Curve is
-            this.firework.push(new DragonCurve(complexity, this.x, this.y, color));
+            let complexity = Math.floor(random(5, 7));     // how many generations the Dragon Curve is
+            this.firework.push(new DragonCurve(complexity, this.x, this.y, color, broken));
         }
 
         // for animation
@@ -60,16 +75,21 @@ class Firework {
     draw() {
         this.drawStem();
         if (this.stemIndex > (height-this.y)/this.stemLength + 50) { // give a slight pause before fireworks hit
-            this.drawFirework();
+            return this.drawFirework();
         }
     }
 
+    // returns true or false depending on if the fireworks are done
     drawFirework() {
-        if (this.index < this.firework[0].sentence.length) {
-            for (let i = 0; i < this.firework.length; ++i) {
-                this.firework[i].draw();
+        for (let i = 0; i < this.firework.length; ++i) {
+            let ret = this.firework[i].draw();
+            // console.log(ret);
+            if (!ret) {
+                this.firework.splice(i, 1);
             }
         }
+        this.index++;
+        console.log(this.firework.length);
     }
     
     drawStem() {
@@ -83,7 +103,7 @@ class Firework {
 }
 
 class DragonCurve {
-    constructor(iterations, x, y, color) {
+    constructor(iterations, x, y, color, broken) {
         // L system
         this.rules = {
             "F": "F+G",
@@ -107,6 +127,7 @@ class DragonCurve {
         // for animation
         this.index = 0;
         this.color = color;
+        this.straight = broken;
     }
 
     generate() {
@@ -118,8 +139,10 @@ class DragonCurve {
         this.sentence = nextSentence;
     }
 
+    // returns true/false on "is there more to draw"
     draw() {
         stroke(...this.color);
+        // console.log(this.index, this.sentence.length);
         if (this.index < this.sentence.length) {
             let current = this.sentence.charAt(this.index++);
             if (current === "F" || current === "G") {
@@ -135,6 +158,12 @@ class DragonCurve {
                 this.currentAngle += 180 + this.angle;
             }
             this.currentAngle = this.currentAngle % 360;
+            if (this.straight) {
+                this.index++;   // makes the fireworks straight lines by incrementing over the + and -
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 }
