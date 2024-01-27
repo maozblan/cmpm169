@@ -27,26 +27,51 @@ function mousePressed() {
     boops[boops.length-1].drawLine();
 }
 
+class Firework {
+    constructor() {
+        // randomize the firework
+        let complexity = random(3, 10);     // how many generations the Dragon Curve is
+        let count = Math.floor(random(20, 40) / complexity);    // how many Dragon Curves are in the firework
+        
+        // pad the screen so the fireworks don't appear too close to the edges
+        let padding = 10;
+        let x = random(width/padding, width-(width/padding));
+        let y = random(height/padding, height-(height/padding));
+        // list of dragon curves
+        this.firework = [];
+        for (let i = 0; i < count; ++i) {
+            this.firework.push(new DragonCurve(complexity, x, y));
+        }
+    }
+
+    draw() {
+
+    }
+}
+
 class DragonCurve {
-    constructor(num) {
+    constructor(iterations, x, y) {
+        // L system
         this.rules = {
             "F": "F+G",
             "G": "F-G",
         }
         this.sentence = "F";
-        this.len = 10;
-        this.angle = 95;
-        this.iterations = num;
+        
+        // dragon curve data
+        this.len = random(7, 10);
+        this.angle = random(95, 105);
+        this.iterations = iterations;
         for (let i = 0; i < this.iterations; ++i) {
-            this.generate();
+            this.generate();    // make sentence
         }
 
         // for iterating the lines
         this.index = 0;
 
         // for the math (to avoid translations)
-        this.x = random(width/4, width/2);
-        this.y = random(height/4, height/2);
+        this.x = x;
+        this.y = y;
         this.currentAngle = random(0, 360);
     }
 
