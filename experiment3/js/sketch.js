@@ -5,6 +5,7 @@
 // L-systems base from https://editor.p5js.org/wmodes/sketches/UoSg_99pH
 
 let boops = [];
+let color1 = [255];
 
 function setup() {
     // place our canvas, making it fit our container
@@ -18,39 +19,71 @@ function setup() {
     });
 
     background(0);
-    stroke(255);
+    boops = new Firework(color1);
+}
+
+function draw() {
+    background(0, 0, 0, 7);
+    boops.draw();
 }
 
 function mousePressed() {
-    boops.push(new DragonCurve(random(5,7)));
-    console.log('boop');
-    boops[boops.length-1].drawLine();
+    boops.push()
 }
 
 class Firework {
-    constructor() {
+    constructor(color) {
         // randomize the firework
-        let complexity = random(3, 10);     // how many generations the Dragon Curve is
-        let count = Math.floor(random(20, 40) / complexity);    // how many Dragon Curves are in the firework
+        let count = Math.floor(random(15, 30));    // how many Dragon Curves are in the firework
         
         // pad the screen so the fireworks don't appear too close to the edges
         let padding = 10;
-        let x = random(width/padding, width-(width/padding));
-        let y = random(height/padding, height-(height/padding));
+        // let x = random(width/padding, width-(width/padding));
+        // let y = random(height/padding, height-(height/padding));
+        this.x = width/2;
+        this.y = height/2;
         // list of dragon curves
         this.firework = [];
         for (let i = 0; i < count; ++i) {
-            this.firework.push(new DragonCurve(complexity, x, y));
+            let complexity = Math.floor(random(5, 8));     // how many generations the Dragon Curve is
+            this.firework.push(new DragonCurve(complexity, this.x, this.y, color));
         }
+
+        // for animation
+        this.index = 0;
+        this.stemIndex = 0;
+        this.stemHeight = height;
+        this.stemLength = 5;
+        this.color = color;
     }
 
     draw() {
+        this.drawStem();
+        if (this.stemIndex > (height-this.y)/this.stemLength + 50) { // give a slight pause before fireworks hit
+            this.drawFirework();
+        }
+    }
 
+    drawFirework() {
+        if (this.index < this.firework[0].sentence.length) {
+            for (let i = 0; i < this.firework.length; ++i) {
+                this.firework[i].draw();
+            }
+        }
+    }
+    
+    drawStem() {
+        stroke(...this.color);
+        if (this.stemIndex < (height-this.y)/this.stemLength) {
+            line(this.x, this.stemHeight, this.x, this.stemHeight-this.stemLength);
+            this.stemHeight -= this.stemLength;
+        }
+        this.stemIndex++;
     }
 }
 
 class DragonCurve {
-    constructor(iterations, x, y) {
+    constructor(iterations, x, y, color) {
         // L system
         this.rules = {
             "F": "F+G",
@@ -66,13 +99,14 @@ class DragonCurve {
             this.generate();    // make sentence
         }
 
-        // for iterating the lines
-        this.index = 0;
-
         // for the math (to avoid translations)
         this.x = x;
         this.y = y;
         this.currentAngle = random(0, 360);
+
+        // for animation
+        this.index = 0;
+        this.color = color;
     }
 
     generate() {
@@ -84,8 +118,9 @@ class DragonCurve {
         this.sentence = nextSentence;
     }
 
-    drawLine() {
-        while (this.index < this.sentence.length) {
+    draw() {
+        stroke(...this.color);
+        if (this.index < this.sentence.length) {
             let current = this.sentence.charAt(this.index++);
             if (current === "F" || current === "G") {
                 let offsetX = this.len*Math.cos(radians(this.currentAngle));
