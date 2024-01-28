@@ -28,33 +28,25 @@
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
-			<h1>Experiment X - Subject/Topic</h1>
+			<h1>Experiment 3 - Generative Methods</h1>
 			<div class="minor-section">
 				<h2>Imitate</h2>
-				<p>To develop artistic creativity in coding, it can be helpful to start by studying and learning from existing examples. This might involve reviewing code written by others, analyzing successful techniques, or even copying and modifying code to better understand how it works. By imitating and learning from existing techniques and strategies, we can gain a better understanding of what has been done before and what is possible, and identify opportunities for improvement and innovation.</p>
-				<p>What code did you start with? (You don't need to provide the code itself, but where did you start?) Document this step briefly.</p>
+				<p>I started with Prof Wes' L-systems code and the wikipedia for the Dragon curve. I got it to work on the system to draw a set generation of dragon curves then broke it by messing with the angles.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Integrate</h2>
-				<p>After learning from existing techniques and strategies, we can build upon that foundation by combining elements from different sources. This might involve combining elements from different programming languages, using libraries or frameworks in new ways, or bringing together techniques from different fields or disciplines. By integrating and combining elements from different sources, we can create something new and unique.</p>
-				<p>How did you extend the code or combine with another technique to make something new? Document this step.</p>
+				<p>The L-system was rewritten with mathematical vectors and normalizing the vectors to calculate the exact points on which the lines should be drawn to. This way, the Dragon Curve could be drawn without rotating or translating the canvas. By setting variables to the starting x, y, and angle, the fireworks were pieced together with rotating multiple broken Dragon Curves about the same point.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Innovate</h2>
-				<p>Finally, we can introduce new or original ideas to our coding process by thinking creatively and pushing the boundaries. This might involve developing entirely new techniques or approaches, or using existing techniques in new and creative ways. By innovating and introducing new ideas, we can create art that is truly groundbreaking.</p>
-				<p>How did you use the code as a jumping off point to create something truly unique and novel? Document this step thoroughly.</p>
+				<p>The fireworks where lastly given stems so they would go up, pause a moment, then explode. By chance, I broke a firework so much it shot out in straight lines and I kept that as a variation. I took the fading idea from Experiment 2 and implemented here too. But instead of decreasing the alpha on the lines, I kept painting a translucent layer of black each frame to fade the lines drawn on the last frame slowly into the dark again. It was a whole lot of math and tweaking numbers until it looked right but hey, it works! Finally for fun, I added in red fireworks for wherever the user clicks.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment. Here's where you can put your reflections.</p>
-				<ul>
-					<li>What part of the project you contributed</li>
-					<li>A reflection on your work and the work of the team</li>
-					<li>Brief highs and lows</li>
-				</ul>
+				<p>It was a single person project but I asked my friend to help me with the math calculations when I decided it was a good idea to calculate dragon curve points by hand. So then I got a friend of mine to help me with the calculation between points of the dragon curve. I explained the algorithm and what I was trying to do to him and he helped with a lot of the calculations.</p>
 			</div>
 
 			<div class="minor-section">
