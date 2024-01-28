@@ -29,13 +29,12 @@ function setup() {
 
 function draw() {
     // fade out the previous drawings
-    background(0, 0, 0, 30);
+    background(0, 0, 0, 20);        // alpha suggestion 7 <= a <= 30
     for (let i = 0; i < boops.length; ++i) {
         if (boops[i].draw()) {
             boops.splice(i, 1);
         }
     }
-    // console.log(boops.length);
     if (random(0, 1) > 0.97) {
         let x = random(width/padding, width-(width/padding));
         let y = random(height/padding, height-(height/padding));
@@ -58,7 +57,6 @@ class Firework {
         // list of dragon curves
         this.firework = [];
         let broken = random(0, 1) <= 0.25 ? true : false;  // add a chance element to get broken fireworks
-        console.log(broken);
         for (let i = 0; i < count; ++i) {
             let complexity = Math.floor(random(5, 7));     // how many generations the Dragon Curve is
             this.firework.push(new DragonCurve(complexity, this.x, this.y, color, broken));
@@ -82,14 +80,11 @@ class Firework {
     // returns true or false depending on if the fireworks are done
     drawFirework() {
         for (let i = 0; i < this.firework.length; ++i) {
-            let ret = this.firework[i].draw();
-            // console.log(ret);
-            if (!ret) {
+            if (!this.firework[i].draw()) {
                 this.firework.splice(i, 1);
             }
         }
         this.index++;
-        console.log(this.firework.length);
     }
     
     drawStem() {
@@ -142,7 +137,6 @@ class DragonCurve {
     // returns true/false on "is there more to draw"
     draw() {
         stroke(...this.color);
-        // console.log(this.index, this.sentence.length);
         if (this.index < this.sentence.length) {
             let current = this.sentence.charAt(this.index++);
             if (current === "F" || current === "G") {
