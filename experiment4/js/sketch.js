@@ -9,7 +9,8 @@ var particles;
 var img;
 var n, s, maxR;
 let start = false;
-let song;
+let song, amp;
+let last = 0;
 
 function setup() {
     // place our canvas, making it fit our container
@@ -34,10 +35,6 @@ function setup() {
     // starter text
     textAlign(CENTER);
     text('CLICK TO PLAY', width/2, height/2);
-
-    // amplitude circle
-    fft = new p5.FFT();
-    song.play();
 }
 
 function preload() {
@@ -50,17 +47,26 @@ function draw() {
         translate(width/2, height/2);
         noStroke();
         
-        if(s > 1) {
-            if(particles.length != 0) {
-                for(let i = 0; i < particles.length; i++) {
-                    var p = particles[i];
-                    p.show();
-                    p.move();
-                    
-                    if(p.isDead()) particles.splice(i, 1);
-                }
-            } else {
-                // s -= 2;
+        let level = amp.getLevel();
+        let threshold = 0.15;
+        console.log(level);
+        if (level != last && level >= threshold) {
+            console.log('here');
+            last = level;
+            particles.push(new Particle(maxR, s));
+            var p = particles[particles.length-1];
+            var x = int(map(p.pos.x, -maxR, maxR, 1, img.width));
+            var y = int(map(p.pos.y, -maxR, maxR, 2, img.height));
+            p.c = img.get(x, y);
+        }
+        
+        if (s > 1) {
+            for (let i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                p.show();
+                p.move();
+                
+                if (p.isDead()) particles.splice(i, 1);
             }
         }
 
@@ -90,14 +96,12 @@ function draw() {
 function mousePressed() {
     if (!start) {
         background("#888888");
+        amp = new p5.Amplitude();
         song.play();
         start = true;
     } else {
-        particles.push(new Particle(maxR, s));
-		var p = particles[particles.length-1];
-		var x = int(map(p.pos.x, -maxR, maxR, 1, img.width));
-        var y = int(map(p.pos.y, -maxR, maxR, 2, img.height));
-		p.c = img.get(x, y);
+        song.pause();
+        start = false;
     }
 }
 
@@ -142,4 +146,19 @@ class Particle {
     if(d > this.maxR || this.life < 1) return true;
     else return false;
   }
+}
+
+function getPitch(spectrum) {
+    // Analyze the spectrum to get the dominant pitch
+    let maxIndex = 0;
+    for (let i = 1; i < spectrum.length; i++) {
+        if (spectrum[i] > spectrum[maxIndex]) {
+            maxIndex = i;
+        }
+    }
+  
+    // Map the index to a pitch value
+    let pitch = map(maxIndex, 0, spectrum.length, 20, 20000);
+  
+    return pitch;
 }
