@@ -10,6 +10,7 @@ var img;
 var n, s, maxR;
 let start = false;
 let song;
+let angleSpin = 0;
 
 function setup() {
     // place our canvas, making it fit our container
@@ -34,6 +35,10 @@ function setup() {
     // starter text
     textAlign(CENTER);
     text('CLICK TO PLAY', width/2, height/2);
+
+    // amplitude circle
+    fft = new p5.FFT();
+    song.play();
 }
 
 function preload() {
@@ -59,6 +64,27 @@ function draw() {
                 // s -= 2;
             }
         }
+
+        background("#888888");
+        let spectrum = fft.analyze();
+        noFill();
+        stroke(255);
+        strokeWeight(2);
+      
+        beginShape();
+        for (let i = 0; i < spectrum.length; i++) {
+            let angle = map(i, 0, spectrum.length, 0, 2*PI);
+            let ampy = map(spectrum[i], 0, 255, 300, 350); // Adjust the amplitude range
+            let ampx = map(spectrum[i], 0, 255, 340, 550); // Adjust the amplitude range
+      
+            // Convert polar to Cartesian coordinates
+            let x = cos(angle + angleSpin) * ampx;
+            let y = sin(angle + angleSpin) * ampy;
+      
+            vertex(x, y);
+        }
+        angleSpin += 0.01;
+        endShape(CLOSE);
     }
 }
 
