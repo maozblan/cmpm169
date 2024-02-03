@@ -1,11 +1,15 @@
 // sketch.js - it draw art
 // Author: Lyssa Li
+// edited from https://openprocessing.org/sketch/2141314
+// music from here https://pixabay.com/music/search/short%20classic%20piano/
+// image from a google search
 // Date:
 
 var particles;
-var img = []
+var img;
 var n, s, maxR;
-var indexImg = 0;
+let start = false;
+let song;
 
 function setup() {
     // place our canvas, making it fit our container
@@ -18,7 +22,7 @@ function setup() {
         resizeCanvas(canvasContainer.width(), canvasContainer.height());
     });
 
-	background("#FFEDDA");
+	background("#888888");
 	smooth();
 	
 	n = 1000;
@@ -26,51 +30,55 @@ function setup() {
 	maxR = height/2 - height/20;
 	
 	particles = [];
-	
-	img.push(loadImage('img/lasAmapolas.PNG'));
-	img.push(loadImage('img/autorretrato.PNG'));
-	img.push(loadImage('img/lilies.jpg'));
+
+    // starter text
+    textAlign(CENTER);
+    text('CLICK TO PLAY', width/2, height/2);
+}
+
+function preload() {
+    img = loadImage('img/starryNight.PNG');
+    song = loadSound('img/lilix27s-dream-116990.mp3');
 }
 
 function draw() {
-	translate(width/2, height/2);
-	noStroke();
-	
-	if(s > 1) {
-		if(particles.length != 0) {
-			for(let i = 0; i < particles.length; i++) {
-				var p = particles[i];
-				p.show();
-				p.move();
-				
-				if(p.isDead()) particles.splice(i, 1);
-			}
-		} else {
-			s -= 2;
-			initParticles();
-		}
-	}
-}
-
-function initParticles() {	
-	for(let i = 0; i < n; i++) {
-		particles.push(new Particle(maxR, s));
-		
-		var p = particles[i];
-		var x = int(map(p.pos.x, -maxR, maxR, 1, img[indexImg].width));
-    var y = int(map(p.pos.y, -maxR, maxR, 2, img[indexImg].height));
-		p.c = img[indexImg].get(x, y);
-	}
+    if (start) {
+        translate(width/2, height/2);
+        noStroke();
+        
+        if(s > 1) {
+            if(particles.length != 0) {
+                for(let i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    p.show();
+                    p.move();
+                    
+                    if(p.isDead()) particles.splice(i, 1);
+                }
+            } else {
+                // s -= 2;
+            }
+        }
+    }
 }
 
 function mousePressed() {
-	indexImg = (indexImg + 1) % img.length;
-	setup();
+    if (!start) {
+        background("#888888");
+        song.play();
+        start = true;
+    } else {
+        particles.push(new Particle(maxR, s));
+		var p = particles[particles.length-1];
+		var x = int(map(p.pos.x, -maxR, maxR, 1, img.width));
+        var y = int(map(p.pos.y, -maxR, maxR, 2, img.height));
+		p.c = img.get(x, y);
+    }
 }
 
 class Particle {
   
-  constructor(maxR_, s_) {
+  constructor(maxR_, s_) {  // s_ = size of particle
     this.s = s_;
     this.c = "";
     this.maxR = maxR_;
