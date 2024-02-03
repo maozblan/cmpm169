@@ -10,7 +10,6 @@ var img;
 var n, s, maxR;
 let start = false;
 let song;
-let angleSpin = 0;
 
 function setup() {
     // place our canvas, making it fit our container
@@ -65,6 +64,7 @@ function draw() {
             }
         }
 
+        /*
         background("#888888");
         let spectrum = fft.analyze();
         noFill();
@@ -73,18 +73,17 @@ function draw() {
       
         beginShape();
         for (let i = 0; i < spectrum.length; i++) {
-            let angle = map(i, 0, spectrum.length, 0, 2*PI);
-            let ampy = map(spectrum[i], 0, 255, 300, 350); // Adjust the amplitude range
-            let ampx = map(spectrum[i], 0, 255, 340, 550); // Adjust the amplitude range
+            let angle = map(i, 0, spectrum.length, 0, 80*PI);
+            let amp = map(spectrum[i], 0, 255, 300, 350); // Adjust the amplitude range
       
             // Convert polar to Cartesian coordinates
-            let x = cos(angle + angleSpin) * ampx;
-            let y = sin(angle + angleSpin) * ampy;
+            let x = cos(angle) * amp;
+            let y = sin(angle) * amp;
       
             vertex(x, y);
         }
-        angleSpin += 0.01;
         endShape(CLOSE);
+        */
     }
 }
 
