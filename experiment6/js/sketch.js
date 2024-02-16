@@ -1,67 +1,48 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
+// sketch.js - it's funnnn
+// Author: Lyssa Li
+// Date: 2024 02 19
 
-// Here is how you might set up an OOP p5.js project
-// Note that p5.js looks for a file called sketch.js
+// edited from https://openprocessing.org/sketch/1098610
 
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+const size = 15;
 
-// Globals
-let myInstance;
-let canvasContainer;
+let chars = [" ", "*", "•", "o", "0", "O", "●"], // These could be whatever... try something like [" ", "^", "*", ")", "%", "$", "#", "&"], or [" ", "•", "●", "⬤"]
+		data,
+		particles = [];
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
-
-    myMethod() {
-        // code to run when method is called
-    }
-}
-
-// setup() function is called once when the program starts
 function setup() {
-    // place our canvas, making it fit our container
-    canvasContainer = $("#canvas-container");
-    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
-    canvas.parent("canvas-container");
-    // resize canvas is the page is resized
-    $(window).resize(function() {
-        console.log("Resizing...");
-        resizeCanvas(canvasContainer.width(), canvasContainer.height());
-    });
-    // create an instance of the class
-    myInstance = new MyClass(VALUE1, VALUE2);
-
-    var centerHorz = windowWidth / 2;
-    var centerVert = windowHeight / 2;
+	createCanvas(~~(windowWidth/size)*size, ~~(windowHeight/size)*size);
+	textFont("Century Schoolbook", size*1);
+	data = new Array(width/size*height/size).fill().map(_ => 0);
 }
 
-// draw() function is called repeatedly, it's the main animation loop
 function draw() {
-    background(220);    
-    // call a method on the instance
-    myInstance.myMethod();
-
-    // Put drawings here
-    var centerHorz = canvasContainer.width() / 2 - 125;
-    var centerVert = canvasContainer.height() / 2 - 125;
-    fill(234, 31, 81);
-    noStroke();
-    rect(centerHorz, centerVert, 250, 250);
-    fill(255);
-    textStyle(BOLD);
-    textSize(140);
-    text("p5*", centerHorz + 10, centerVert + 200);
+	background(255);
+	const ps = particles.sort((a, b) => a.vel.magSq()-b.vel.magSq());
+	let p;
+	for(let i = 0; i < data.length; i ++){
+		text(chars[data[i]], i % (width/size) * size, Math.floor(i / (width/size)) * size);
+		let d = new p5.Vector(i % (width/size) * size, Math.floor(i / (width/size)) * size);
+		p = ps.filter(z => z.pos.dist(d) < 100); // Not ideal, but performance-wise it is a must
+		data[i] = 0
+		if(!p.length) continue;
+		for(let part of p){
+			ds = part.pos.dist(d)/5;
+			data[i] += Math.round((chars.length-1)/(ds < 1 ? 1 : ds));
+		}
+		if(data[i] > chars.length-1) data[i] = chars.length-1
+	}
+	
+	for(let p of particles) {
+		p.pos.add(p.vel);
+		p.vel.rotate(noise(p.pos.x/100, p.pos.y/100)-0.5);
+		if(p.pos.x < -20) p.pos.x = width+20
+		if(p.pos.x > width+20) p.pos.x = -20
+		if(p.pos.y < -20) p.pos.y = height+20
+		if(p.pos.y > height+20) p.pos.y = -20
+	}
 }
 
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
+function mouseDragged(){
+	if(new p5.Vector(mouseX-pmouseX, mouseY-pmouseY).mag() > 5) particles.push({pos: new p5.Vector(mouseX, mouseY), vel: new p5.Vector(mouseX-pmouseX, mouseY-pmouseY).div(4)})
 }
