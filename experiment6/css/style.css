@@ -14,6 +14,12 @@ body {
 }
 
 #canvas-container {
-    width: 100%;
-    height: 600px;
+    width: 1410px;
+    height: 1110px;
+}
+
+.canvas-container-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
