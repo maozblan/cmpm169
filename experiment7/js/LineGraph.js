@@ -1,8 +1,8 @@
 // just the line graph OOP
 
 class LineGraph {
-    constructor(data, color, zero, xStart, xEnd) {
-        this.data = data; // should be a list of points
+    constructor(color, zero, xStart, xEnd) {
+        this.data = [zero]; // should be a list of points
         this.index = 0; // current point to be animated
         this.zero = zero; // y index of "y=0"
         this.color = color; // color of line
@@ -13,39 +13,45 @@ class LineGraph {
         
         // animate between the points
         this.counter = 0;
-        this.framesPerPoint = 4;
+        this.framesPerPoint = 10;
 
         // tracking
         this.currentLoc = this.zero; // current y-loc
-        this.echoCount = 10; // number of points that are remembered
+        this.echoCount = 50; // number of points that are remembered
         this.echoArr = new Array(this.echoCount).fill(this.currentLoc);
+    }
+
+    setData(data) {
+        this.data = data;
+        this.index = 0;
+        console.log(data);
     }
     
     draw() {
-        if (this.counter === this.framesPerPoint) {
-            this.index++;
-            this.counter = 0;
-        }
         stroke(this.color);
         strokeWeight(1);
         noFill();
-        // update the lines to draw
-        this.echoArr.shift();
-        // difference of this point to next point, scaled down
         if (this.index < this.data.length-1) {
-            this.currentLoc += (this.data[this.index+1] - this.data[this.index]) / this.framesPerPoint;
-            this.currentLoc *= this.yScalar; // scale Y so it doesn't stick to the bottom of the screen
-            this.currentLoc += this.zero; // offset
+            // difference of this point to next point, scaled down
+            this.currentLoc += (this.data[this.index+1] - this.data[this.index]) / this.framesPerPoint * this.yScalar;
+            if (this.counter === this.framesPerPoint) {
+                this.index++;
+                this.counter = 0;
+            } else {
+                this.counter++;
+            }
         } else {
             this.currentLoc = this.zero;
         }
+        this.echoArr.shift();
         this.echoArr.push(this.currentLoc);
         // draw the lines
         let x = this.xStart;
-        const xStep = (this.xEnd-this.xStart)/this.echoCount;
+        const xStep = (this.xEnd-this.xStart)/this.echoArr.length;
         for (let i = 0; i < this.echoArr.length-1; ++i) {
             line(x, this.echoArr[i], x+xStep, this.echoArr[i+1]);
             x += xStep;
         }
+        // console.log(this.echoArr, this.index);
     }
 }
