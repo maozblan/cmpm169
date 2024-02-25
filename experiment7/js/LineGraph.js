@@ -1,5 +1,7 @@
 // just the line graph OOP
 
+var framesPerPoint = 10; // to use elsewhere
+
 class LineGraph {
     constructor(color, zero, xStart, xEnd) {
         this.data = [zero]; // should be a list of points
@@ -9,11 +11,11 @@ class LineGraph {
         this.xStart = xStart;
         this.xEnd = xEnd;
         
-        this.yScalar = 10; // scale up the y values maybe
+        this.yScalar = 25; // scale up the y values maybe
         
         // animate between the points
         this.counter = 0;
-        this.framesPerPoint = 10;
+        this.framesPerPoint = framesPerPoint;
 
         // tracking
         this.currentLoc = this.zero; // current y-loc
@@ -24,12 +26,12 @@ class LineGraph {
     setData(data) {
         this.data = data;
         this.index = 0;
-        console.log(data);
+        // console.log(data);
     }
     
     draw() {
         stroke(this.color);
-        strokeWeight(1);
+        strokeWeight(3);
         noFill();
         if (this.index < this.data.length-1) {
             // difference of this point to next point, scaled down
