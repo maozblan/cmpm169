@@ -9,23 +9,23 @@ class Line {
     this.yNoiseFreq = yNoiseFreq;
     this.xIncrement = xIncrement;
     // save the current framecount for later
-    this.frameCount = frameCount;
+    this.frameCount = sketchy.frameCount;
     this.noiseValues = Array();
     // save yOffset for draw()
     this.yOffset = yOffset;
     // create this line
-    let numPoints = windowWidth / this.xIncrement;
-    for (let x = 0; x <= windowWidth; x += windowWidth / numPoints) {
-      this.noiseValues.push(noise(x * this.xNoiseFreq, this.frameCount * this.yNoiseFreq) * windowHeight);
+    let numPoints = sketchy.windowWidth / this.xIncrement;
+    for (let x = 0; x <= sketchy.windowWidth; x += sketchy.windowWidth / numPoints) {
+      this.noiseValues.push(sketchy.noise(x * this.xNoiseFreq, this.frameCount * this.yNoiseFreq) * sketchy.windowHeight);
     }
   }
 
   draw() {
-    beginShape();
+    sketchy.beginShape();
     for (let i = 0; i < this.noiseValues.length; i++) {
-      curveVertex(i * (this.xIncrement*2) - (windowWidth*0.3), this.noiseValues[i] + this.yOffset);
+      sketchy.curveVertex(i * (this.xIncrement*2) - (sketchy.windowWidth*0.3), this.noiseValues[i] + this.yOffset);
     }
-    endShape();
+    sketchy.endShape();
   }
 }
   
@@ -48,15 +48,15 @@ class Field {
   
   draw() {
     // redefine context to ensure correct context before drawing
-    strokeWeight(1);
-    noFill();
+    sketchy.strokeWeight(1);
+    sketchy.noFill();
     // slow down the framerate for slower rolling mist
     if (this.counter == this.secondsPerFrame) {
       this.counter = 0;
       // calculate the xIncrement based on the windowWidth of the
       // screen, the desired number of points and echoes value
       // in order to keep a constant number of points/speed
-      let xIncrement = windowWidth * this.echoes / this.numPoints;
+      let xIncrement = sketchy.windowWidth * this.echoes / this.numPoints;
       // create new line
       let newLine = new Line(this.xNoiseFreq, this.yNoiseFreq, xIncrement, this.yOffset);
       // add it to the array of echoes
@@ -72,9 +72,9 @@ class Field {
     let color = 255;
     let a = 300;
     for(let i=0;i < this.echoArray.length;i++) {
-      stroke(color, color, color, a);
+      sketchy.stroke(color, color, color, a);
       this.echoArray[i].draw();
-      a -= int(300/this.echoArray.length);
+      a -= sketchy.int(300/this.echoArray.length);
     }
   }
 }
