@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment 2 - Vector Art, Animation & Interactivity</title>
+	<title>into the mist</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -24,44 +25,86 @@
 	<script type="text/javascript" src="./js/foreground.js" DEFER></script>
 	<script type="text/javascript" src="./js/funcs.js" DEFER></script>
 </head>
+
 <body>
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
-	<main id="content">
-		<section>
-			<h1>Experiment 2 - Vector Art, Animation & Interactivity</h1>
-			<div class="minor-section">
-				<h2>Imitate</h2>
-				<p>The main inspirtation for this project was broken into two parts, inpiration for the feeling of the piece and the imitation material for the technical aspects. The feels were inspired from the music video cover for the Chinese song 雾里 (wu li) and ph4se.space's space drawing. Meanwhile, the technical aspects were drawn from Vivek Singh Negi's fractal forest, and Professor Wes' single line noise. I took the source code and worked with it until I was comfortable enough to play around and went from there.</p>
-			</div>
+	<div id="canvas-container">
+		<h1 class="title">into the mist</h1>
+		<p class="click grey">click to interact</p>
+		<p class="scroll grey">scroll</p>
+		<div id="background"></div>
+		<div id="midground"></div>
+		<div id="foreground"></div>
+	</div>
+	<div id="text">
+		<div class="text">
+			<h3>project description</h3>
+			<p>this project focuses on vector art, animation, and interaction, the entire mood of the piece should be some
+				form of infinitely watchable forest. very much wanted to chase the vibe of being lost in the woods but just
+				enjoying the nature. really wanted to capture the essense of an unknown, etherial yet not scary feeling.</p>
+			<p>modifications of the have been done to the trees to make them fit more of th misty vibe. birds now also have a
+				jitter as they fade to give it more movmement.</p>
+			<p>most importantly, the project has been split from one p5 canvas into three p5 canvases using instance mode.
+				this took out a lot of the strain from the draw() function and significantly increased the speed at which the
+				animations played :D the split worked so nicely because the environment is made up of a clear foreground,
+				midground and background where the foregorund and background were mostly just the trees and necessarily only
+				needed to render once</p>
+			<p>devlog 2025 01 16</p>
 
-			<div class="minor-section">
-				<h2>Integrate</h2>
-				<p>I brought together the trees and the lines to make this misty feeling using the trees to build a forest and the slow rolling of the lines to make abstract mist. The color palette from the music video really brought it together. I brought in some knowledge I have about making visual art and the ideas of depth both in layers and in colors to help give the forest some more life. First, I slid the mist between layers of trees to give the forest some depth into "the distance." Second, I tried to fade out the lines slowly to give a bit more mistly effect and have it roll like smoke. To make it "fade out," I wrote up a bit </p>
-			</div>
+			<h3>credit where credit is due</h3>
+			<p class="c">code for the mist (little wavey lines that move) is edited from <a
+					href="https://editor.p5js.org/wmodes/sketches/SFh-TOVFs">noise sketch</a> by wes modes</p>
+			<p class="c">code for the stars is edited from <a
+					href="https://github.com/negiyosai/Fractal-Forest/tree/master">fractal
+					trees</a> by negiyosai (though for this version i did not use their trees)</p>
+			<p class="c">here is also a <a href="https://editor.p5js.org/maozblan/sketches/xlauhdzph">tree test</a> that i
+				made myself
+				on p5 editor.</p>
+			<p class="c">and here is the <a href="https://editor.p5js.org/maozblan/sketches/dZvAVk-0f">original version</a> of
+				the
+				project on p5</p>
+			<br />
+			<nav>
+				<a href="../index.html">return to main</a>
+			</nav>
+			<br />
+			<br />
+			<br />
+			<h3>devlog 2025 01 22</h3>
+			<h3>Imitate</h3>
+			<p>The main inspirtation for this project was broken into two parts, inpiration for the feeling of the piece and
+				the imitation material for the technical aspects. The feels were inspired from the music video cover for the
+				Chinese song 雾里 (wu li) and ph4se.space's space drawing. Meanwhile, the technical aspects were drawn from Vivek
+				Singh Negi's fractal forest, and Professor Wes' single line noise. I took the source code and worked with it
+				until I was comfortable enough to play around and went from there.</p>
 
-			<div class="minor-section">
-				<h2>Innovate</h2>
-				<p>I really liked the idea of rolling smoke so I tried to add a bit of abstract birds. I wanted them to spawn every so often but found it more interactive and fun if the user can spawn them where ever they liked. Thus I implemented a click handler. Drawing from the Star, Line, and Field classes in the integrated code, I wrote my own Bird and Flock classes. The Bird class mimiced the logic from Line class, creating individual instances of a shape with it's own data and draw function. Like the Field class, the Flock class collects instances of Birds to an array and draws them. Instead of an infinitely updating array, the Flock contains a random number of Birds and slowly fades them out. The fadeout technique was the same as the mist's with the decrease of alpha. However, this one is randomized to create much more variety. In the end, the feeling of the birds looked much more like the Stars although it was based mostly on the mist.</p>
-			</div>
+			<h3>Integrate</h3>
+			<p>I brought together the trees and the lines to make this misty feeling using the trees to build a forest and the
+				slow rolling of the lines to make abstract mist. The color palette from the music video really brought it
+				together. I brought in some knowledge I have about making visual art and the ideas of depth both in layers and
+				in colors to help give the forest some more life. First, I slid the mist between layers of trees to give the
+				forest some depth into "the distance." Second, I tried to fade out the lines slowly to give a bit more mistly
+				effect and have it roll like smoke. To make it "fade out," I wrote up a bit </p>
 
-			<div class="minor-section">
-				<h2>Reflection</h2>
-				<p>This was a one person project. I did the whole thing... There were plenty of highs and lows, such as trying to cram it over the week and on Friday afternoon right before the hackathon, not making it before the hackathon started, showing my friends during hackathon (they really liked it!), and adding it to the hackathon project haha. I definitely don't want to procastinate as much next time, this sucked. But hey, I got through it and I really like what I made.</p>
-			</div>
+			<h3>Innovate</h3>
+			<p>I really liked the idea of rolling smoke so I tried to add a bit of abstract birds. I wanted them to spawn
+				every so often but found it more interactive and fun if the user can spawn them where ever they liked. Thus I
+				implemented a click handler. Drawing from the Star, Line, and Field classes in the integrated code, I wrote my
+				own Bird and Flock classes. The Bird class mimiced the logic from Line class, creating individual instances of a
+				shape with it's own data and draw function. Like the Field class, the Flock class collects instances of Birds to
+				an array and draws them. Instead of an infinitely updating array, the Flock contains a random number of Birds
+				and slowly fades them out. The fadeout technique was the same as the mist's with the decrease of alpha. However,
+				this one is randomized to create much more variety. In the end, the feeling of the birds looked much more like
+				the Stars although it was based mostly on the mist.</p>
 
-			<div class="minor-section">
-				<h2>Results</h2>
-				<div id="canvas-container">
-					<div id="background"></div>
-					<div id="midground"></div>
-					<div id="foreground"></div>
-					<div id="interaction"></div>
-				</div>
-			</div>
-		</section>
-		<nav id="links">
-			<!-- Put links to other pages (including the homepage) here. -->
-		</nav>
-	</main>
+			<h3>Reflection</h3>
+			<p>This was a one person project. I did the whole thing... There were plenty of highs and lows, such as trying to
+				cram it over the week and on Friday afternoon right before the hackathon, not making it before the hackathon
+				started, showing my friends during hackathon (they really liked it!), and adding it to the hackathon project
+				haha. I definitely don't want to procastinate as much next time, this sucked. But hey, I got through it and I
+				really like what I made.</p>
+		</div>
+	</div>
 </body>
+
 </html>

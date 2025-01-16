@@ -21,3 +21,10 @@ function makeTrees(maxHeight, minHeight, density, func) {
     }
   }
 }
+
+// clear scroll text
+$(window).on("scroll", function () {
+  if ($(this).scrollTop() > 100) {
+    $('.scroll').fadeOut();
+  }
+});

@@ -1,13 +1,12 @@
 // miground.js - handles drawing of noise line used for mist + stars
-// edited from https://editor.p5js.org/wmodes/sketches/SFh-TOVFs
+// mist edited from https://editor.p5js.org/wmodes/sketches/SFh-TOVFs
+// star edited from https://github.com/negiyosai/Fractal-Forest/tree/master
 // Author: Lyssa Li
 // Date: 2024 Jan 22, updated 2025 Jan 15
 
 let mg = new p5((sketch) => {
   let canvasContainer;
   //stars
-  let starX = [];
-  let starY = [];
   let stars = [];
   // mist
   let field;
@@ -95,6 +94,7 @@ let mg = new p5((sketch) => {
   // makes flock at mouse press location
   sketch.mousePressed = () => {
     console.log("boop");
+    $('.click').fadeOut();
     let flock = new Flock(sketch.mouseX, sketch.mouseY);
     flocks.push(flock);
   };
