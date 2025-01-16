@@ -25,6 +25,10 @@ body, div, nav {
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 h1 {
   text-align: center;
 }
@@ -50,8 +54,8 @@ h1 {
   text-align: center;
   text-decoration: none;
   color: var(--text);
+  transition: filter 0.5s linear;
 }
 .card:hover {
   filter: blur(0px) opacity(100%);
-  transition: filter 0.5s linear;
 }
