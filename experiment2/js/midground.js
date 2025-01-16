@@ -3,14 +3,15 @@
 // Author: Lyssa Li
 // Date: 2024 Jan 22, updated 2025 Jan 15
 
-//stars
-let starX = [];
-let starY = [];
-let stars = [];
-// mist
-let field;
-
 let mg = new p5((sketch) => {
+  let canvasContainer;
+  //stars
+  let starX = [];
+  let starY = [];
+  let stars = [];
+  // mist
+  let field;
+
   sketch.setup = () => {
     canvasContainer = $("#midground");
     let canvas = sketch.createCanvas(
@@ -80,7 +81,7 @@ let mg = new p5((sketch) => {
     for (let i = 0; i < stars.length; i++) {
       stars[i].draw();
     }
-  }
+  };
 
   class Field {
     constructor(yOffset = 0) {

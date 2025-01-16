@@ -2,8 +2,6 @@
 // Author: Lyssa Li
 // Date: 2024 Jan 22, updated 2025 Jan 15
 
-// Globals
-let canvasContainer;
 // trees
 let forestSize;
 // birds
@@ -13,6 +11,8 @@ let sketchy;
 // p5 instances
 let bg = new p5((sketch) => {
   sketchy = sketch;
+  let canvasContainer;
+
   sketch.setup = () => {
     canvasContainer = $("#background");
     let canvas = sketch.createCanvas(
@@ -45,9 +45,6 @@ let bg = new p5((sketch) => {
   };
 
   sketch.draw = () => {
-    // background
-    drawGradient();
-
     // back tree layer
     for (let i = 0; i < forestSize; i++) {
       drawTree(forestSize + i);
@@ -121,36 +118,6 @@ let bg = new p5((sketch) => {
         leafSize,
         leafSize
       );
-    }
-  }
-
-  function drawStars() {
-  }
-
-  function drawGradient() {
-    let color1 = sketch.color(255); //top
-    let color2 = sketch.color(0); //bottom
-    setGradient(
-      0,
-      0,
-      canvasContainer.width(),
-      canvasContainer.height(),
-      color1,
-      color2,
-      "Y"
-    );
-  }
-
-  function setGradient(x, y, w, h, c1, c2, axis) {
-    sketch.noFill();
-    if (axis == "Y") {
-      // Top to bottom gradient
-      for (let i = y; i <= y + h; i++) {
-        let inter = sketch.map(i, y, y + h * 1.3, 0, 1);
-        let c = sketch.lerpColor(c1, c2, inter);
-        sketch.stroke(c);
-        sketch.line(x, i, x + w, i);
-      }
     }
   }
 });
