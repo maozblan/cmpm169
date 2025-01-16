@@ -11,6 +11,8 @@ let mg = new p5((sketch) => {
   let stars = [];
   // mist
   let field;
+  // birds
+  let flocks = [];
 
   sketch.setup = () => {
     canvasContainer = $("#midground");
@@ -75,12 +77,26 @@ let mg = new p5((sketch) => {
 
   sketch.draw = () => {
     sketch.clear();
+
+    // draw mist
     field.draw();
 
     // draw stars
     for (let i = 0; i < stars.length; i++) {
       stars[i].draw();
     }
+
+    // draw birds
+    for (let flock of flocks) {
+      flock.draw();
+    }
+  };
+
+  // makes flock at mouse press location
+  sketch.mousePressed = () => {
+    console.log("boop");
+    let flock = new Flock(sketch.mouseX, sketch.mouseY);
+    flocks.push(flock);
   };
 
   class Field {
@@ -152,6 +168,84 @@ let mg = new p5((sketch) => {
       sketch.noStroke();
       sketch.fill(255);
       sketch.ellipse(this.x, this.y, scale, scale);
+    }
+  }
+
+  class Bird {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.size = sketch.random(5, 10);
+      this.rotation = sketch.random(p5.TWO_PI);
+      // for fade out effect, alpha in RGBA
+      this.a = sketch.random(300, 400);
+    }
+
+    draw() {
+      sketch.fill(255, 0, 0, this.a);
+      sketch.noStroke();
+      drawTriangle(this.x, this.y, this.size, this.rotation);
+
+      // edited from chatGPT
+      function drawTriangle(x, y, size, rotation) {
+        sketch.push(); // Save the current transformation state
+        sketch.translate(x, y); // Move the origin to the mouse position
+        sketch.rotate(rotation); // Rotate
+
+        // Draw a triangle with the given size
+        sketch.triangle(
+          -size / 2,
+          size / (2 * sketch.sqrt(3)),
+          0,
+          -size / sketch.sqrt(3),
+          size / 2,
+          size / (2 * sketch.sqrt(3))
+        );
+
+        sketch.pop(); // Restore the previous transformation state
+      }
+    }
+
+    fly() {
+      this.x += sketch.random(2);
+      this.y -= sketch.random(2);
+
+      // fade out
+      this.a -= sketch.random(5, 10);
+    }
+  }
+
+  class Flock {
+    constructor(x, y) {
+      // flock fading out data
+      this.counter = 0;
+      this.birdCount = sketch.int(sketch.random(3, 5));
+      // bird data
+      this.flockArray = [new Bird(x, y)];
+      this.lastBird = { x: x, y: y };
+    }
+
+    draw() {
+      for (let bird of this.flockArray) {
+        bird.draw();
+        // fade out the bird
+        bird.fly();
+        if (bird.a < 0) {
+          this.flockArray.splice(this.flockArray.indexOf(bird), 1);
+        }
+      }
+      // new birds
+      if (this.counter < this.birdCount && sketch.random(0, 1) > 0.4) {
+        // tilt the new bird slightly right
+        this.lastBird.x = this.lastBird.x + sketch.random(-5, 40);
+        this.lastBird.y = this.lastBird.y + sketch.random(-40, 30);
+        this.flockArray.push(new Bird(this.lastBird.x, this.lastBird.y));
+        this.counter++;
+      }
+    }
+
+    addBird(bird) {
+      this.flockArray.push(bird);
     }
   }
 });
