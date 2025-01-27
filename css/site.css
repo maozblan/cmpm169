@@ -59,3 +59,19 @@ h1 {
 .card:hover {
   filter: blur(0px) opacity(100%);
 }
+
+
+.grey {
+  color: #aaa;
+}
+
+.scroll {
+  margin-top: auto;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 10px;
+}

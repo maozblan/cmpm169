@@ -1,24 +1,29 @@
-// fireworks.js - dragon curve firework oop
+// fireworks.js - l-system firework oop
 // Author: Lyssa Li
 // Date: Jan 29th 2024, updated Jan 27th 2025
 
 class Firework {
   constructor(x, y, color, p5) {
+    // randomize the type of firework
+    const a = [DragonCurve];
+    const i = Math.floor(Math.random() * a.length);
+    const fireworkType = a[i];
+
     // randomize the firework
-    let count = Math.floor(p5.random(15, 30)); // how many Dragon Curves are in the firework
+    let count = Math.floor(p5.random(15, 30)); // how many curves are in the firework
 
     this.x = x;
     this.y = y;
 
     this.p5 = p5; // p5 instance
 
-    // list of dragon curves
+    // list of Curves
     this.firework = [];
     let broken = p5.random(0, 1) <= 0.25 ? true : false; // add a chance element to get broken fireworks
     for (let i = 0; i < count; ++i) {
       let complexity = Math.floor(p5.random(5, 7)); // how many generations the Dragon Curve is
       this.firework.push(
-        new DragonCurve(complexity, this.x, this.y, color, broken, p5)
+        new fireworkType(complexity, this.x, this.y, color, broken, p5)
       );
     }
 
@@ -51,7 +56,12 @@ class Firework {
   drawStem() {
     this.p5.stroke(...this.color);
     if (this.stemIndex < (this.p5.height - this.y) / this.stemLength) {
-      this.p5.line(this.x, this.stemHeight, this.x, this.stemHeight - this.stemLength);
+      this.p5.line(
+        this.x,
+        this.stemHeight,
+        this.x,
+        this.stemHeight - this.stemLength
+      );
       this.stemHeight -= this.stemLength;
     }
     this.stemIndex++;
@@ -91,7 +101,7 @@ class DragonCurve {
 
   generate() {
     let nextSentence = "";
-    for (let i = 0; i < this.sentence.length; i++) {
+    for (let i = 0; i < this.sentence.length; ++i) {
       let current = this.sentence.charAt(i);
       nextSentence += this.rules[current] || current;
     }
