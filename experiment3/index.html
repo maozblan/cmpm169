@@ -38,43 +38,50 @@
 		</nav>
 		<br />
 		<br />
+		<h3>project description</h3>
+		<p>click to spawn a white firework.</p>
+		<p>this piece focuses on creating art with L-system (generative method). currently there are fireworks made from the
+			dragon curve and the fractal tree, all very common systems. every so often there is a mutated firework.</p>
+		<h3>credit where credit is due</h3>
+		<p class="c">code for l-systems in p5 based off of <a
+				href="https://editor.p5js.org/wmodes/sketches/UoSg_99pH">l-system sample</a> by wes modes</p>
+		<p class="c"><a href="https://en.wikipedia.org/wiki/L-system">wikipedia</a> for defining L-systems and breaking them
+			down into understandable terms</p>
+		<p class="c">and here is the <a href="https://editor.p5js.org/maozblan/sketches/4Vrlx9Mbu">original version</a> of
+			the project on p5</p>
+		<br />
+		<br />
+		<h3>devlog 2025 01 27</h3>
+		<p>refactored the code to support multiple different types of fireworks. added in the fractal tree firework.</p>
+		<p>added in color variation using HSL color format as it was easier to get a full range of pastel colors from that.
+			i hoped to use pastel colors as they are much more vibrant on a black background</p>
+		<p>changed to instance mode, though that was not used for much as of right now.</p>
+		<br />
+		<h3>devlog 2024 01 29</h3>
+		<h3>Imitate</h3>
+		<p>I started with Prof Wes' L-systems code and the wikipedia for the Dragon curve. I got it to work on the
+			system to draw a set generation of dragon curves then broke it by messing with the angles.</p>
+
+		<h3>Integrate</h3>
+		<p>The L-system was rewritten with mathematical vectors and normalizing the vectors to calculate the exact
+			points on which the lines should be drawn to. This way, the Dragon Curve could be drawn without rotating or
+			translating the canvas. By setting variables to the starting x, y, and angle, the fireworks were pieced
+			together with rotating multiple broken Dragon Curves about the same point.</p>
+
+		<h3>Innovate</h3>
+		<p>The fireworks where lastly given stems so they would go up, pause a moment, then explode. By chance, I broke
+			a firework so much it shot out in straight lines and I kept that as a variation. I took the fading idea from
+			Experiment 2 and implemented here too. But instead of decreasing the alpha on the lines, I kept painting a
+			translucent layer of black each frame to fade the lines drawn on the last frame slowly into the dark again. It
+			was a whole lot of math and tweaking numbers until it looked right but hey, it works! Finally for fun, I added
+			in red fireworks for wherever the user clicks.</p>
+
+		<h3>Reflection</h3>
+		<p>It was a single person project but I asked my friend to help me with the math calculations when I decided it
+			was a good idea to calculate dragon curve points by hand. So then I got a friend of mine to help me with the
+			calculation between points of the dragon curve. I explained the algorithm and what I was trying to do to him
+			and he helped with a lot of the calculations.</p>
 	</div>
-	<main id="content">
-		<section>
-			<div class="minor-section">
-				<h2>Imitate</h2>
-				<p>I started with Prof Wes' L-systems code and the wikipedia for the Dragon curve. I got it to work on the
-					system to draw a set generation of dragon curves then broke it by messing with the angles.</p>
-			</div>
-
-			<div class="minor-section">
-				<h2>Integrate</h2>
-				<p>The L-system was rewritten with mathematical vectors and normalizing the vectors to calculate the exact
-					points on which the lines should be drawn to. This way, the Dragon Curve could be drawn without rotating or
-					translating the canvas. By setting variables to the starting x, y, and angle, the fireworks were pieced
-					together with rotating multiple broken Dragon Curves about the same point.</p>
-			</div>
-
-			<div class="minor-section">
-				<h2>Innovate</h2>
-				<p>The fireworks where lastly given stems so they would go up, pause a moment, then explode. By chance, I broke
-					a firework so much it shot out in straight lines and I kept that as a variation. I took the fading idea from
-					Experiment 2 and implemented here too. But instead of decreasing the alpha on the lines, I kept painting a
-					translucent layer of black each frame to fade the lines drawn on the last frame slowly into the dark again. It
-					was a whole lot of math and tweaking numbers until it looked right but hey, it works! Finally for fun, I added
-					in red fireworks for wherever the user clicks.</p>
-			</div>
-
-			<div class="minor-section">
-				<h2>Reflection</h2>
-				<p>It was a single person project but I asked my friend to help me with the math calculations when I decided it
-					was a good idea to calculate dragon curve points by hand. So then I got a friend of mine to help me with the
-					calculation between points of the dragon curve. I explained the algorithm and what I was trying to do to him
-					and he helped with a lot of the calculations.</p>
-			</div>
-
-		</section>
-	</main>
 </body>
 
 </html>

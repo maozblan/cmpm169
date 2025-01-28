@@ -31,5 +31,15 @@ body {
 }
 
 a {
-    color: #d33;
+    color: #ade;
+}
+
+#text {
+    width: 80%;
+    max-width: 750px;
+    padding: 100px 30px;
+}
+
+h3, #text p.c {
+    text-align: center;
 }
