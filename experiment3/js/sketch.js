@@ -5,8 +5,7 @@
 // L-systems base from https://editor.p5js.org/wmodes/sketches/UoSg_99pH
 
 let boops = [];
-let color1 = [255]; // normal fireworks
-let color2 = [255, 0, 0]; // user click fireworks
+let white = [0, 0, 100]; // white in HSL
 
 // pad the screen so the fireworks don't appear too close to the edges
 let padding = 10;
@@ -29,28 +28,40 @@ function createFireworkCanvas(canvasID) {
       sketch.resizeCanvas(canvasContainer.width(), canvasContainer.height());
 
       sketch.background(0);
-      // start firework show
-      boops.push(new Firework(sketch.width / 2, sketch.height / 2, color1, sketch));
+
+      // change colormode for ease of handling colors
+      sketch.colorMode(sketch.HSL);
     };
 
     sketch.draw = () => {
       // fade out the previous drawings
-      sketch.background(0, 0, 0, 20); // alpha suggestion 7 <= a <= 30
+      sketch.background(0, 0.11); // alpha suggestion 0.05 <= a <= 0.25
       for (let i = 0; i < boops.length; ++i) {
         if (boops[i].draw()) {
           boops.splice(i, 1);
         }
       }
       if (sketch.random(0, 1) > 0.97) {
-        let x = sketch.random(sketch.width / padding, sketch.width - sketch.width / padding);
-        let y = sketch.random(sketch.height / padding, sketch.height - sketch.height / padding);
-        boops.push(new Firework(x, y, color1, sketch));
+        const color = [
+          sketch.random(0, 255),
+          sketch.random(70, 100),
+          sketch.random(50, 70),
+        ];
+        let x = sketch.random(
+          sketch.width / padding,
+          sketch.width - sketch.width / padding
+        );
+        let y = sketch.random(
+          sketch.height / padding,
+          sketch.height - sketch.height / padding
+        );
+        boops.push(new Firework(x, y, color, sketch));
       }
     };
 
-		sketch.mousePressed = () => {
-			boops.push(new Firework(sketch.mouseX, sketch.mouseY, color2, sketch));
-		};
+    sketch.mousePressed = () => {
+      boops.push(new Firework(sketch.mouseX, sketch.mouseY, white, sketch));
+    };
   });
 }
 

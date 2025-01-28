@@ -14,7 +14,7 @@ class Firework {
       {
         type: Tree,
         count: [15, 30],
-        complexity: [3, 9],
+        complexity: [3, 6],
       }
     ];
 
@@ -32,7 +32,7 @@ class Firework {
 
     // list of Curves
     this.firework = [];
-    let diff = p5.random(0, 1) <= 0.25 ? true : false; // add a chance element to get mutated fireworks
+    let diff = p5.random(0, 1) <= 0.30 ? true : false; // add a chance element to get mutated fireworks
     for (let i = 0; i < count; ++i) {
       let complexity = Math.floor(p5.random(...a[k].complexity)); // how many generations of L-system
       this.firework.push(
