@@ -4,13 +4,26 @@
 
 class Firework {
   constructor(x, y, color, p5) {
+    // firework data
+    const a = [
+      {
+        type: DragonCurve,
+        count: [15, 30],
+        complexity: [5, 7],
+      },
+      {
+        type: Tree,
+        count: [15, 30],
+        complexity: [3, 9],
+      }
+    ];
+
     // randomize the type of firework
-    const a = [DragonCurve];
-    const i = Math.floor(Math.random() * a.length);
-    const fireworkType = a[i];
+    const k = p5.random(0, 1) <= 0.25 ? 1 : 0; // 25% chance of tree
+    const fireworkType = a[k].type;
 
     // randomize the firework
-    let count = Math.floor(p5.random(15, 30)); // how many curves are in the firework
+    let count = Math.floor(p5.random(...a[k].count)); // how many curves are in the firework
 
     this.x = x;
     this.y = y;
@@ -19,11 +32,11 @@ class Firework {
 
     // list of Curves
     this.firework = [];
-    let broken = p5.random(0, 1) <= 0.25 ? true : false; // add a chance element to get broken fireworks
+    let diff = p5.random(0, 1) <= 0.25 ? true : false; // add a chance element to get mutated fireworks
     for (let i = 0; i < count; ++i) {
-      let complexity = Math.floor(p5.random(5, 7)); // how many generations the Dragon Curve is
+      let complexity = Math.floor(p5.random(...a[k].complexity)); // how many generations of L-system
       this.firework.push(
-        new fireworkType(complexity, this.x, this.y, color, broken, p5)
+        new fireworkType(complexity, this.x, this.y, color, p5, diff)
       );
     }
 
@@ -69,7 +82,7 @@ class Firework {
 }
 
 class DragonCurve {
-  constructor(iterations, x, y, color, broken, p5) {
+  constructor(iterations, x, y, color, p5, broken) {
     // L system
     this.rules = {
       F: "F+G",
@@ -133,5 +146,85 @@ class DragonCurve {
     } else {
       return false;
     }
+  }
+}
+
+class Tree {
+  constructor(iterations, x, y, color, p5, reverse) {
+    // L system
+    this.rules = {
+      1: "11",
+      0: "1[0]0",
+    };
+    this.sentence = "0";
+
+    // fractal tree data
+    this.reverse = reverse;
+    this.len = p5.random(7, 10);
+    this.iterations = iterations;
+    for (let i = 0; i < this.iterations; ++i) {
+      this.generate(); // make sentence
+    }
+
+    // for the math (to avoid translations)
+    this.x = x;
+    this.y = y;
+    this.currentAngle = p5.random(0, 360);
+    this.loc = [];
+
+    // for animation
+    this.index = 0;
+    this.color = color;
+
+    // p5 instance to draw from
+    this.p5 = p5;
+  }
+
+  generate() {
+    let nextSentence = "";
+    for (let i = 0; i < this.sentence.length; ++i) {
+      let current = this.sentence.charAt(i);
+      nextSentence += this.rules[current] || current;
+    }
+    this.sentence = nextSentence;
+  }
+
+  // returns true/false on "is there more to draw"
+  draw() {
+    this.p5.stroke(...this.color);
+    if (this.index < this.sentence.length) {
+      let current = this.sentence.charAt(this.index++);
+      if (current === "1" || current === "0") {
+        let offsetX = this.len * Math.cos(this.p5.radians(this.currentAngle));
+        let offsetY = this.len * Math.sin(this.p5.radians(this.currentAngle));
+        this.p5.line(this.x, this.y, this.x - offsetX, this.y + offsetY);
+        this.x -= offsetX;
+        this.y += offsetY;
+      } else if (current === "[") {
+        if (this.reverse) {
+          this.currentAngle += 45;
+        } else {
+          this.currentAngle -= 45;
+        }
+        this.#locPush();
+      } else if (current === "]") {
+        this.#locPop();
+        if (this.reverse) {
+          this.currentAngle -= 90;
+        } else {
+          this.currentAngle += 90;
+        }
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  #locPush() {
+    this.loc.push([this.x, this.y, this.currentAngle]);
+  }
+  #locPop() {
+    [this.x, this.y, this.currentAngle] = this.loc.pop();
   }
 }
